@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contacto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class PaginaController extends Controller
 {
@@ -29,12 +31,23 @@ class PaginaController extends Controller
         //Validar
         /* Validate aplica reglas de validacion */
         $req->validate([
-            'nombre' => 'required|max:255|min:3',
-            'email' => ['required','email']
+            'name' => 'required|max:255|min:3',
+            'email' => 'required|email',
+            'comentario' => 'required|min:3'
         ]);
 
         //Insertar a BD
+        $contactoCreado = Contacto::create([
+            'nombre' => $req->name,
+            'email' => $req->email,
+            'comentario' => $req->comentario,
+        ]);
 
         //Redirigir
+        return redirect('/contacto');
+        /* CON ESTO ENVIAS LA INFO DE VUELTA AL FORMULARIO 
+        $nombre = $contactoCreado->nombre;
+        $email = $contactoCreado->email;
+        return view('contacto',compact('nombre','email')); */
     }
 }
